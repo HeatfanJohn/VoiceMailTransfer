@@ -52,6 +52,13 @@ exports.handler = function(event, context, callback) {
                         console.log("Subject: " + parsed.subject);
                         console.log("Date: "    + parsed.date);
                         console.log("Text: "    + parsed.text);
+                        console.log("Attachments: ");
+                        parsed.attachments.forEach(attachment => {
+                            console.log("attachment.size = " + attachment.size);
+                            console.log("attachment.filename = " + attachment.filename);
+                            console.log("attachment.contentType = " + attachment.contentType);
+                            console.log("attachment.content = " + attachment.content);
+                        });
                     })
                     .catch(err => {
                         console.log("simpleParser threw an error " + err);
