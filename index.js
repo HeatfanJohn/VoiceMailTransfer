@@ -44,13 +44,14 @@ exports.handler = function(event, context, callback) {
                     callback(err);
                 }
                 else {
-                    console.log("Raw email:\n" + data.Body);
+                    // console.log("Raw email:\n" + data.Body);
                     simpleParser(data.Body)
                         .then(parsed => {
-                            console.log("From: "    + parsed.From);
-                            console.log("To: "      + parsed.To);
-                            console.log("Subject: " + parsed.Subject);
-                            console.log("Date: "    + parsed.Date);
+                            console.log("From: "    + parsed.from.text);
+                            console.log("To: "      + parsed.to.text);
+                            console.log("Subject: " + parsed.subject);
+                            console.log("Date: "    + parsed.date);
+                            console.log("Text: "    + parsed.text);
                         })
                         .catch(err => {
                             console.log("simpleParser threw an error " + err);
