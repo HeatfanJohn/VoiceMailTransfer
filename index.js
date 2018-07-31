@@ -51,13 +51,27 @@ exports.handler = function(event, context, callback) {
                         console.log("To: "      + parsed.to.text);
                         console.log("Subject: " + parsed.subject);
                         console.log("Date: "    + parsed.date);
-                        console.log("Text: "    + parsed.text);
-                        console.log("Attachments: ");
+                        console.log("Text: "    + parsed.textAsHtml);
+                        console.log("Attachments: " + Object.keys(parsed.attachments).length);
                         parsed.attachments.forEach(attachment => {
                             console.log("attachment.size = " + attachment.size);
                             console.log("attachment.filename = " + attachment.filename);
                             console.log("attachment.contentType = " + attachment.contentType);
-                            console.log("attachment.content = " + attachment.content);
+                            s3.client.putOject({
+                                Bucket: bucketName,
+                                Key: "voicemail/" + attachment.filename,
+                                Body: attachment.content,
+                                ContentMD5: attachment.checksum
+                            }, function(err, data) {
+                                if (err) {
+                                    console.log(err, err.stack, data);
+                                    callback(err);
+                                }
+                                else {
+                                    console.log("S3 putObject voicemail/" + attachment.filename
+                                        + " successful!");
+                                }
+                            });
                         });
                     })
                     .catch(err => {
