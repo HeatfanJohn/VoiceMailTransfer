@@ -57,6 +57,7 @@ exports.handler = function(event, context, callback) {
                             console.log("attachment.size = " + attachment.size);
                             console.log("attachment.filename = " + attachment.filename);
                             console.log("attachment.contentType = " + attachment.contentType);
+                            var s3 = new AWS.S3();
                             s3.putOject({
                                 Bucket: bucketName,
                                 Key: "voicemail/" + attachment.filename,
@@ -64,12 +65,12 @@ exports.handler = function(event, context, callback) {
                                 ContentMD5: attachment.checksum
                             }, function(err, data) {
                                 if (err) {
-                                    console.log(err, err.stack, data);
+                                    console.log(err, err.stack);
                                     callback(err);
                                 }
                                 else {
                                     console.log("S3 putObject voicemail/" + attachment.filename
-                                        + " successful!");
+                                        + " successful, data = " + data);
                                 }
                             });
                         });
