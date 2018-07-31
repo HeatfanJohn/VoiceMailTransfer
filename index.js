@@ -57,7 +57,7 @@ exports.handler = function(event, context, callback) {
                             console.log("attachment.size = " + attachment.size);
                             console.log("attachment.filename = " + attachment.filename);
                             console.log("attachment.contentType = " + attachment.contentType);
-                            s3.client.putOject({
+                            s3.putOject({
                                 Bucket: bucketName,
                                 Key: "voicemail/" + attachment.filename,
                                 Body: attachment.content,
