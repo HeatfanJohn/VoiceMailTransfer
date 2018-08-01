@@ -8,16 +8,19 @@ Your Lambda function can control mail flow by returning one of the following val
 
     CONTINUE or any other invalid value—This means that further actions and receipt rules can be processed.
 */
+"use strict";
 
 exports.handler = function(event, context, callback) {
     console.log("Checking for SPAM");
     
-    var AWS = require("aws-sdk");
-    var s3 = new AWS.S3();
+    const AWS = require("aws-sdk");
+    const s3 = new AWS.S3();
     
     const simpleParser = require("mailparser").simpleParser;
+    const md5 = require("md5");
 
-    var bucketName = "jpm-email";
+    const bucketName = process.env.BUCKET_NAME;
+    const s3PrefixValue = process.env.S3_PREFIX_VALUE;
     
     var sesNotification = event.Records[0].ses;
     console.log("SES Notification:\n", JSON.stringify(sesNotification, null, 2));
@@ -37,7 +40,7 @@ exports.handler = function(event, context, callback) {
         // Retrieve the email from your bucket
         s3.getObject({
             Bucket: bucketName,
-            Key: "voicemail/" + sesNotification.mail.messageId
+            Key: s3PrefixValue + sesNotification.mail.messageId
         }, function(err, data) {
             if (err) {
                 console.log(err, err.stack);
@@ -58,6 +61,7 @@ exports.handler = function(event, context, callback) {
                             console.log("attachment.filename = " + attachment.filename);
                             console.log("attachment.contentType = " + attachment.contentType);
                             console.log("attachment.checksum = " + attachment.checksum);
+                            console.log("md5(attachment.content = " + md5(attachment.content));
                             s3.putObject({
                                 Bucket: bucketName,
                                 Key: "voicemail/" + attachment.filename,
