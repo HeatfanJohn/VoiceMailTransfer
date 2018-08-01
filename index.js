@@ -40,7 +40,7 @@ exports.handler = function(event, context, callback) {
         // Retrieve the email from your bucket
         s3.getObject({
             Bucket: bucketName,
-            Key: s3PrefixValue + sesNotification.mail.messageId
+            Key: s3PrefixValue + "/" + sesNotification.mail.messageId
         }, function(err, data) {
             if (err) {
                 console.log(err, err.stack);
