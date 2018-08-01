@@ -64,7 +64,7 @@ exports.handler = function(event, context, callback) {
                             console.log("md5(attachment.content) = " + md5(attachment.content));
                             s3.putObject({
                                 Bucket: bucketName,
-                                Key: "voicemail/" + attachment.filename,
+                                Key: s3PrefixValue + "/" + attachment.filename,
                                 Body: attachment.content //,
                                 // ContentMD5: attachment.checksum
                             }, function(err, data) {
