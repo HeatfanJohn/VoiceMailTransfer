@@ -1,0 +1,7 @@
+deploy:
+  provider: lambda
+  function_name: "VoiceMailTranscribe"
+  region: "us-east-1"
+  role: "arn:aws:iam::617287328294:role/lambda_deploy_VMTranscribe"
+  runtime: "nodejs8.10"
+  handler_name: "index.handler"
